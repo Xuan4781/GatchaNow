@@ -1,57 +1,49 @@
-// Check if player has coins
 if (global.coins >= 1) {
     global.coins -= 1;
 
-    // Choose a random character for the pull
-    var chars = [s_c1, s_c2];
-    var chosen_sprite = chars[irandom(array_length(chars)-1)];
+    // Choose random character (static sprite for inventory)
+    var chars = [s_c1, s_c2];   // STATIC SPRITES ONLY
+    var chosen_static = chars[irandom(array_length(chars)-1)];
 
-    // Remove previous pull display if exists
-    if (global.current_pull != noone && instance_exists(global.current_pull)) {
-        instance_destroy(global.current_pull);
+    // Store pulled sprite for inventory
+    global.last_pull_sprite_static = chosen_static;
+
+    // Store animation sprite for middle animation
+    if (chosen_static == s_c1) {
+        global.last_pull_sprite_anim = s_c1_anim;
+    } else if (chosen_static == s_c2) {
+        global.last_pull_sprite_anim = s_c2_anim;
     }
 
-    // Spawn new character in the gacha room
-    var spawn_x = room_width / 2;
-    var spawn_y = room_height / 2;
-    global.current_pull = instance_create_layer(spawn_x, spawn_y, "Instances", o_character);
-    global.current_pull.sprite_index = chosen_sprite;
-
-    // Check if pulled item already exists in inventory
+    // --- Add to inventory ---
     var found = false;
     for (var i = 0; i < array_length(global.inv); i++) {
-        if (global.inv[i].sprite == chosen_sprite) {
-            global.inv[i].count += 1;  // increment count for duplicates
+        if (global.inv[i].sprite == chosen_static) {
+            global.inv[i].count += 1;
             found = true;
             break;
         }
     }
 
-    // If not found, add new item with count = 1
     if (!found) {
-        var new_item = undefined;
-
-        // Search in the item list
+        // Look up item in item_list
         for (var i = 0; i < array_length(global.item_list); i++) {
-            if (global.item_list[i].sprite == chosen_sprite) {
-                new_item = global.item_list[i];
+            if (global.item_list[i].sprite == chosen_static) {
+                var new_item = global.item_list[i];
+                array_push(global.inv, {
+                    name: new_item.name,
+                    description: new_item.description,
+                    sprite: new_item.sprite, // static sprite
+                    count: 1,
+                    base_value: new_item.base_value
+                });
                 break;
             }
         }
-
-        if (new_item != undefined) {
-            // Copy item and add count & base_value
-            var item_copy = {
-                name: new_item.name,
-                description: new_item.description,
-                sprite: new_item.sprite,
-                count: 1,
-                base_value: new_item.base_value
-            };
-
-            array_push(global.inv, item_copy);
-        }
     }
+
+    // Go to pull result room
+    room_goto(rm_pull_result);
 
 } else {
     show_message("Not enough coins!");
