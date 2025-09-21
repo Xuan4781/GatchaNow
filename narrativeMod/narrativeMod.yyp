@@ -53,6 +53,7 @@
     {"id":{"name":"s_c1","path":"sprites/s_c1/s_c1.yy",},},
     {"id":{"name":"s_c2","path":"sprites/s_c2/s_c2.yy",},},
     {"id":{"name":"s_coin","path":"sprites/s_coin/s_coin.yy",},},
+    {"id":{"name":"s_gatcha_back","path":"sprites/s_gatcha_back/s_gatcha_back.yy",},},
     {"id":{"name":"s_player","path":"sprites/s_player/s_player.yy",},},
     {"id":{"name":"s_pull","path":"sprites/s_pull/s_pull.yy",},},
     {"id":{"name":"Dungeon","path":"tilesets/Dungeon/Dungeon.yy",},},
