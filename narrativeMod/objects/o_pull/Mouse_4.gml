@@ -1,21 +1,35 @@
 if (global.coins >= 1) {
     global.coins -= 1;
 
-    // Choose random character (static sprite for inventory)
-    var chars = [s_c1, s_c2];   // STATIC SPRITES ONLY
-    var chosen_static = chars[irandom(array_length(chars)-1)];
+    var pull_table = [
+    { spr: s_rare, anim_spr: s_rare_anim, weight: 5 },
+    { spr: s_c1, anim_spr: s_c1_anim, weight: 47 },
+	{ spr: s_c4, anim_spr: s_c4_anim, weight: 71 },
+	{ spr: s_c5, anim_spr: s_c5_anim, weight: 30 },
+	{ spr: s_c6, anim_spr: s_c6_anim, weight: 90 },
+	// { spr: s_rare, anim_spr: s_rare_anim, weight: 5 } // 5% chance
+	];
 
-    // Store pulled sprite for inventory
-    global.last_pull_sprite_static = chosen_static;
+	// Picking
+	var total_weight = 0;
+	for (var i = 0; i < array_length(pull_table); i++) total_weight += pull_table[i].weight;
 
-    // Store animation sprite for middle animation
-    if (chosen_static == s_c1) {
-        global.last_pull_sprite_anim = s_c1_anim;
-    } else if (chosen_static == s_c2) {
-        global.last_pull_sprite_anim = s_c2_anim;
-    }
+	var r = irandom(total_weight - 1);
+	var cum_weight = 0;
+	var chosen_entry;
+	for (var i = 0; i < array_length(pull_table); i++) {
+	    cum_weight += pull_table[i].weight;
+	    if (r < cum_weight) {
+	        chosen_entry = pull_table[i];
+	        break;
+	    }
+	}
 
-    // --- Add to inventory ---
+	var chosen_static = chosen_entry.spr;
+	global.last_pull_sprite_static = chosen_static;
+	global.last_pull_sprite_anim = chosen_entry.anim_spr;
+
+    // Add to inventory
     var found = false;
     for (var i = 0; i < array_length(global.inv); i++) {
         if (global.inv[i].sprite == chosen_static) {
@@ -26,14 +40,13 @@ if (global.coins >= 1) {
     }
 
     if (!found) {
-        // Look up item in item_list
         for (var i = 0; i < array_length(global.item_list); i++) {
             if (global.item_list[i].sprite == chosen_static) {
                 var new_item = global.item_list[i];
                 array_push(global.inv, {
                     name: new_item.name,
                     description: new_item.description,
-                    sprite: new_item.sprite, // static sprite
+                    sprite: new_item.sprite,
                     count: 1,
                     base_value: new_item.base_value
                 });
@@ -42,7 +55,7 @@ if (global.coins >= 1) {
         }
     }
 
-    // Go to pull result room
+    // Switch to pull result room
     room_goto(rm_pull_result);
 
 } else {

@@ -11,6 +11,7 @@ y = 0;
 
 // Use the pulled animation sprite
 if (variable_global_exists("last_pull_sprite_anim")) {
+	audio_play_sound(so_pull, 1, false);
     sprite_index = global.last_pull_sprite_anim;
 } else {
     sprite_index = s_c1_anim; // fallback
