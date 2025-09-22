@@ -1,64 +1,45 @@
 var move = 4;
 var moving = false;
+var hsp = 0;
+var vsp = 0;
 
-// LEFT
-if (keyboard_check(vk_left)) {
-    if (!place_meeting(x - move, y, o_wall)) {
-        x -= move;
-    }
-    sprite_index = s_playerleftidle; // default
-    if (keyboard_check(vk_left)) sprite_index = s_playerleftrun;
-    last_hdir = "left";
-    moving = true;
-}
+if (keyboard_check(vk_left))  hsp -= move;
+if (keyboard_check(vk_right)) hsp += move;
+if (keyboard_check(vk_up))    vsp -= move;
+if (keyboard_check(vk_down))  vsp += move;
 
-// RIGHT
-if (keyboard_check(vk_right)) {
-    if (!place_meeting(x + move, y, o_wall)) {
-        x += move;
-    }
-    sprite_index = s_playerrightrun;
-    last_hdir = "right";
-    moving = true;
-}
-
-// UP
-if (keyboard_check(vk_up)) {
-    if (!place_meeting(x, y - move, o_wall)) {
-        y -= move;
-    }
-    moving = true;
-    // Reuse last horizontal direction
-    if (last_hdir == "left") {
-        sprite_index = s_playerleftidle;
+// --- Horizontal 
+if (hsp != 0) {
+    if (!place_meeting(x + hsp, y, o_wall)) {
+        x += hsp;
     } else {
-        sprite_index = s_playerrightrun;
-    }
-}
-
-// DOWN
-if (keyboard_check(vk_down)) {
-    if (!place_meeting(x, y + move, o_wall)) {
-        y += move;
+        while (!place_meeting(x + sign(hsp), y, o_wall)) {
+            x += sign(hsp);
+        }
     }
     moving = true;
-    if (last_hdir == "left") {
-        sprite_index = s_playerleftidle;
-    } else {
-        sprite_index = s_playerrightrun;
-    }
+    last_hdir = (hsp < 0) ? "left" : "right";
 }
 
-// If not moving, set idle sprite
+// --- Vertical
+if (vsp != 0) {
+    if (!place_meeting(x, y + vsp, o_wall)) {
+        y += vsp;
+    } else {
+        while (!place_meeting(x, y + sign(vsp), o_wall)) {
+            y += sign(vsp);
+        }
+    }
+    moving = true;
+}
+
 if (!moving) {
-    if (last_hdir == "left") {
-        sprite_index = s_playerleftidle;
-    } else {
-        sprite_index = s_playerrightidle;
-    }
+    sprite_index = (last_hdir == "left") ? s_playerleftidle : s_playerrightidle;
+} else {
+    sprite_index = (last_hdir == "left") ? s_playerleftrun : s_playerrightrun;
 }
 
-// Collision with enemy
+// --- Enemy
 if (place_meeting(x, y, o_enemy)) {
     global.coins = 0;
     var safe_inst = instance_nearest(x, y, o_safeSpot);
@@ -67,7 +48,7 @@ if (place_meeting(x, y, o_enemy)) {
         y = safe_inst.y;
     }
 }
-// Update last safeSpot the player is on
+
 var safe_inst = instance_place(x, y, o_safeSpot);
 if (safe_inst != noone) {
     global.last_safeSpot = safe_inst;

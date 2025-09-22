@@ -1,17 +1,16 @@
 var max_coins = 5;
-var buffer = 16; // distance from walls to avoid
+var buffer = 16; 
 
 if (instance_number(o_coin) < max_coins) {
     var attempts = 0;
     var placed = false;
 
-    while (!placed && attempts < 50) { // try more times to find a safe spot
+    while (!placed && attempts < 50) {
         attempts += 1;
 
         var cx = irandom(room_width - 32);
         var cy = irandom(room_height - 32);
 
-        // Check collision with walls using collision_rectangle
         var left = cx - buffer;
         var top = cy - buffer;
         var right = cx + 32 + buffer;

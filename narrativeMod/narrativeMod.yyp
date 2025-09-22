@@ -39,7 +39,6 @@
     {"id":{"name":"FontSmall","path":"fonts/FontSmall/FontSmall.yy",},},
     {"id":{"name":"o_back","path":"objects/o_back/o_back.yy",},},
     {"id":{"name":"o_button","path":"objects/o_button/o_button.yy",},},
-    {"id":{"name":"o_character","path":"objects/o_character/o_character.yy",},},
     {"id":{"name":"o_chicken","path":"objects/o_chicken/o_chicken.yy",},},
     {"id":{"name":"o_coin","path":"objects/o_coin/o_coin.yy",},},
     {"id":{"name":"o_coinspawn","path":"objects/o_coinspawn/o_coinspawn.yy",},},

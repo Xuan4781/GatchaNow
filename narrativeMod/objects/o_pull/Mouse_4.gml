@@ -7,10 +7,9 @@ if (global.coins >= 1) {
 	{ spr: s_c4, anim_spr: s_c4_anim, weight: 71 },
 	{ spr: s_c5, anim_spr: s_c5_anim, weight: 30 },
 	{ spr: s_c6, anim_spr: s_c6_anim, weight: 90 },
-	// { spr: s_rare, anim_spr: s_rare_anim, weight: 5 } // 5% chance
 	];
 
-	// Picking
+	// Pulling logic
 	var total_weight = 0;
 	for (var i = 0; i < array_length(pull_table); i++) total_weight += pull_table[i].weight;
 
@@ -42,20 +41,18 @@ if (global.coins >= 1) {
     if (!found) {
         for (var i = 0; i < array_length(global.item_list); i++) {
             if (global.item_list[i].sprite == chosen_static) {
-                var new_item = global.item_list[i];
-                array_push(global.inv, {
-                    name: new_item.name,
-                    description: new_item.description,
-                    sprite: new_item.sprite,
-                    count: 1,
-                    base_value: new_item.base_value
-                });
+                var new_item = {
+				    name: global.item_list[i].name,
+				    description: global.item_list[i].description,
+				    sprite: global.item_list[i].sprite,
+				    count: 1
+				};
+				array_push(global.inv, new_item);
                 break;
             }
         }
     }
 
-    // Switch to pull result room
     room_goto(rm_pull_result);
 
 } else {

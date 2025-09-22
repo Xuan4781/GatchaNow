@@ -1,34 +1,32 @@
-/// o_ItemManager: Create / Draw / Step combined setup
-
-// Draw on top
 depth = -999;
+persistent = true;
 
-// Use dedicated small font for inventory text
 if (!variable_global_exists("FontSmall")) {
-    global.FontSmall = Font1; // Assign the small font resource
+    global.Font = Font1;
 }
-global.font = global.FontSmall;
+global.font = global.Font;
 
-// Initialize item list if it doesn't exist
 if (!variable_global_exists("item_list")) {
     global.item_list = [
-        { name:"Burger", description:"It's a Burger, recovers HP", sprite:s_c1, base_value:1 },
-        { name:"Rare Char", description:"A super rare character", sprite:s_rare, base_value:10 },
-		{ name:"Rejection", description:"Useless", sprite:s_c4, base_value:1 },
-		{ name:"Resume", description:"some working paper", sprite:s_c5, base_value:3 },
-		{ name:"Mcdonalds", description:"an option", sprite:s_c6, base_value:3 }
+        { name:"Burger", description:"It's a Burger, recovers HP", sprite:s_c1 },
+        { name:"Rare Char", description:"A super rare character", sprite:s_rare },
+        { name:"Rejection", description:"Useless", sprite:s_c4 },
+        { name:"Resume", description:"Some working paper", sprite:s_c5 },
+        { name:"Mcdonalds", description:"An option", sprite:s_c6 }
     ];
 }
 
-// Initialize inventory if it doesn't exist
 if (!variable_global_exists("inv")) {
     global.inv = [];
 }
 
-// Inventory drawing settings
-sep = 16;                // vertical spacing between items
-screen_bord_x = 10;      // left margin
-screen_bord_y = 10;      // top margin
-inv_sprite_scale = 0.4;  // scale for inventory sprites
-text_offset_x = 18;      // horizontal offset for text relative to sprite
-text_offset_y = 2;       // vertical offset for text relative to sprite
+if (!variable_global_exists("inv_display")) {
+    global.inv_display = [];
+}
+
+sep = 17;
+screen_bord_x = 10;
+screen_bord_y = 10;
+inv_sprite_scale = 0.4;
+text_padding_x = 18;
+text_offset_y = 2;
